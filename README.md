@@ -1,81 +1,162 @@
-# Turborepo starter
 
-This is an official starter Turborepo.
+# Qif 
 
-## Using this example
+## Home
 
-Run the following command:
+### Introduction
+FiltersProvider is a React component that allows for managing and synchronizing filter states with URL search parameters. This library simplifies handling filters in your React applications by allowing you to manage filter state externally and sync it with the URL.
 
-```sh
-npx create-turbo@latest
+### Getting Started
+Learn how to get started with the FiltersProvider package by following the installation and usage instructions.
+
+---
+
+## Installation
+
+### Install the Package
+To install the FiltersProvider package in your project, use the following command:
+
+```bash
+yarn add qif
 ```
 
-## What's inside?
+### Basic Setup
+After installation, import `FiltersProvider` and other hooks from the library, and wrap your components in the `FiltersProvider` to manage filter states.
 
-This Turborepo includes the following packages/apps:
+---
 
-### Apps and Packages
+## Usage
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Overview
+The `FiltersProvider` allows you to pass external filter states (`filters`) and their updater (`setFilters`) for efficient filter management. It synchronizes filter states with URL search parameters for a seamless user experience.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Basic Example
+Here’s a simple example of using the `FiltersProvider` with custom filter components:
 
-### Utilities
+```typescript
+import { FiltersProvider } from 'qif';
+import { useState } from 'react';
+import FilterComponent from './FilterComponent';
+import ResetButton from './ResetButton';
 
-This Turborepo has some additional tools already setup for you:
+const DataFilter = () => {
+  const [filters, setFilters] = useState<Params>({});
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
+  return (
+    <FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>
+      <div className='flex flex-col gap-5'>
+        <FilterComponent name='test_filter' />
+        <FilterComponent name='another_filter' />
+        <ResetButton />
+      </div>
+    </FiltersProvider>
+  );
+};
 ```
 
-### Remote Caching
+---
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## API Reference
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+### FiltersProvider
 
+The `FiltersProvider` component takes in filter state and its updater function and provides various methods to manage filters efficiently.
+
+**Props**:
+- `filters`: `T` - Filter values managed by your external state.
+- `setFilters`: `Dispatch<SetStateAction<T>>` - State updater function for filters.
+- `syncSearchParams`: `boolean` - Syncs the filters with URL search parameters if true.
+- `onBeforeStateChange`: `(filters: T, reason: keyof T | 'clear') => T` - Callback function before the filter state changes.
+
+### useFilters
+
+The `useFilters` hook provides methods for registering, setting, and resetting filters.
+
+**Methods**:
+- `register(name: keyof T, defaultValue: unknown)`: Registers a filter and sets its default value.
+- `unregister(name: keyof T)`: Unregisters a filter.
+- `setValue(name: keyof T, value: unknown)`: Updates the value of a specific filter.
+- `getValue(name: keyof T)`: Retrieves the current value of a filter.
+- `reset()`: Resets all filters to their initial values.
+- `isResetDisabled()`: Returns true if the reset button should be disabled.
+
+---
+
+## Examples
+
+### FilterComponent Example
+Here’s a reusable filter input component using `useFilters` to manage individual filters:
+
+```typescript
+import { useFilters } from 'qif';
+import { useEffect } from 'react';
+
+export const FilterComponent = ({ name, defaultValue = '' }) => {
+  const { register, setValue, getValue } = useFilters();
+
+  useEffect(() => {
+    register(name, defaultValue);
+  }, [name, register, defaultValue]);
+
+  const handleChange = (e) => setValue(name, e.target.value);
+
+  return (
+    <input
+      type='text'
+      onChange={handleChange}
+      placeholder={`Filter: ${name}`}
+      value={getValue(name) || defaultValue}
+    />
+  );
+};
 ```
-cd my-turborepo
-npx turbo login
+
+### ResetButton Example
+A button component that resets all filters using the `reset` function from the `useFilters` hook:
+
+```typescript
+import { useFilters } from 'qif';
+
+export const ResetButton = () => {
+  const { reset, isResetDisabled } = useFilters();
+
+  return (
+    <button onClick={reset} disabled={isResetDisabled}>
+      Reset Filters
+    </button>
+  );
+};
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+---
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## Tutorial
 
+### How to Create Custom Filters
+In this section, you will learn how to create custom filter components using the `useFilters` hook from the FiltersProvider package. We'll start by setting up a basic filter and then show you how to manage multiple filters together.
+
+#### Step 1: Set up filter state
+First, initialize your filter state using `useState` in your main component.
+
+```typescript
+const [filters, setFilters] = useState<Params>({});
 ```
-npx turbo link
+
+#### Step 2: Use FiltersProvider
+Wrap your components inside the `FiltersProvider`, passing the filter state and its updater.
+
+```typescript
+<FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>...</FiltersProvider>
 ```
 
-## Useful Links
+#### Step 3: Create filter components
+Create individual filter components using the `useFilters` hook to register and set filter values.
 
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+```typescript
+const FilterComponent = ({ name, defaultValue }) => {
+  const { register, setValue, getValue } = useFilters();
+  useEffect(() => register(name, defaultValue), [name, register, defaultValue]);
+  const handleChange = (e) => setValue(name, e.target.value);
+  return (<input value={getValue(name)} onChange={handleChange} />);
+};
+```
