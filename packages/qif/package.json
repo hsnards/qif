@@ -1,13 +1,26 @@
 {
-  "name": "qif",
+  "name": "@qif/react",
   "private": true,
   "type": "module",
   "version": "1.0.0",
+  "description": "Powerful filtering system for React.js applications",
   "license": "MIT",
   "author": {
     "email": "1214hassan1214@gmail.com",
     "name": "Hasan Ardestani"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsnards/qif.git"
+  },
+  "keywords": [
+    "filter",
+    "filtering",
+    "react",
+    "typescript",
+    "store",
+    "headless"
+  ],
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc && yarn run -T vite build"
