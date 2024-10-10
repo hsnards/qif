@@ -1,17 +1,13 @@
 {
-  "name": "@qif/react",
-  "private": true,
+  "name": "react-qif",
+  "private": false,
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Powerful filtering system for React.js applications",
   "license": "MIT",
   "author": {
     "email": "1214hassan1214@gmail.com",
     "name": "Hasan Ardestani"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hsnards/qif.git"
   },
   "keywords": [
     "filter",

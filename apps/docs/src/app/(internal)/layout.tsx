@@ -1,4 +1,4 @@
-import { LayoutComponent } from "@/components/layout";
+import { LayoutComponent } from "@/components/layout/layout";
 
 export default function InternalLayout({
   children,

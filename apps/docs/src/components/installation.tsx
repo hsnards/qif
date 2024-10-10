@@ -1,36 +1,38 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
+import { CodeBlock } from "./CodeBlock"
+
 
 export function InstallationComponent() {
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText('npm install qif')
-  }
-
   return (
+
       <div className="space-y-6">
         <section className="space-y-3">
-          <h2 className="text-2xl font-semibold tracking-tight text-red-600 dark:text-white">Installation</h2>
-          <p className="text-gray-700 dark:text-red-100">
-            To install the Qif package in your project, run the following command in your terminal:
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Installation</h2>
+          <p className="text-muted-foreground">
+            To get started with Qif, you need to install it in your React project. You can do this using npm or yarn.
           </p>
-          <div className="bg-gray-100 dark:bg-red-800 p-4 rounded-md flex justify-between items-center">
-            <code className="text-sm font-mono text-red-600 dark:text-white">npm install qif</code>
-            <Button onClick={copyToClipboard} variant="outline" size="sm" className="text-red-600 dark:text-white border-red-600 dark:border-white hover:bg-red-100 dark:hover:bg-red-700">
-              Copy
-            </Button>
+        </section>
+        <section className="space-y-3">
+          <h3 className="text-xl font-semibold text-foreground">Using npm</h3>
+          <div className="bg-gray-400/10 p-4 rounded-md">
+            <pre className="overflow-x-auto">
+              <code className="text-sm text-muted-foreground">npm install react-qif</code>
+            </pre>
           </div>
         </section>
         <section className="space-y-3">
-          <h2 className="text-2xl font-semibold tracking-tight text-red-600 dark:text-white">Requirements</h2>
-          <p className="text-gray-700 dark:text-red-100">
-            Qif is compatible with React 16.8+ and requires a modern JavaScript environment with ES6 support.
-          </p>
+          <h3 className="text-xl font-semibold text-foreground">Using yarn</h3>
+          <div className="bg-gray-400/10 p-4 rounded-md">
+            <pre className="overflow-x-auto">
+              <code className="text-sm text-muted-foreground">yarn add react-qif</code>
+            </pre>
+          </div>
         </section>
         <section className="space-y-3">
-          <h2 className="text-2xl font-semibold tracking-tight text-red-600 dark:text-white">Next Steps</h2>
-          <p className="text-gray-700 dark:text-red-100">
-            After installation, head over to the <a href="/usage" className="text-red-600 dark:text-red-300 hover:underline">Usage</a> page to learn how to implement Qif in your project.
+          <h3 className="text-xl font-semibold text-foreground">Requirements</h3>
+          <p className="text-muted-foreground">
+            Qif requires React 16.8+ as it uses React Hooks. Make sure your project meets this requirement before installation.
           </p>
         </section>
       </div>

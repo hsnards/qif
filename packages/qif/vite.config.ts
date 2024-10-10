@@ -14,6 +14,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src"),
       formats: ["es"],
+      fileName:'qif'
     },
 
     rollupOptions: {

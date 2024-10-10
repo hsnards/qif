@@ -1,6 +1,6 @@
-import { UsageComponent } from "@/components/usage";
+import { TutorialComponent } from "@/components/tutorial";
 
 export default function Home() {
-    return <UsageComponent />;
+    return <TutorialComponent />;
   }
   
