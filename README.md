@@ -1,12 +1,13 @@
-
-# Qif 
+# Qif
 
 ## Home
 
 ### Introduction
+
 FiltersProvider is a React component that allows for managing and synchronizing filter states with URL search parameters. This library simplifies handling filters in your React applications by allowing you to manage filter state externally and sync it with the URL.
 
 ### Getting Started
+
 Learn how to get started with the FiltersProvider package by following the installation and usage instructions.
 
 ---
@@ -14,6 +15,7 @@ Learn how to get started with the FiltersProvider package by following the insta
 ## Installation
 
 ### Install the Package
+
 To install the FiltersProvider package in your project, use the following command:
 
 ```bash
@@ -21,6 +23,7 @@ yarn add react-qif
 ```
 
 ### Basic Setup
+
 After installation, import `FiltersProvider` and other hooks from the library, and wrap your components in the `FiltersProvider` to manage filter states.
 
 ---
@@ -28,9 +31,11 @@ After installation, import `FiltersProvider` and other hooks from the library, a
 ## Usage
 
 ### Overview
+
 The `FiltersProvider` allows you to pass external filter states (`filters`) and their updater (`setFilters`) for efficient filter management. It synchronizes filter states with URL search parameters for a seamless user experience.
 
 ### Basic Example
+
 Here’s a simple example of using the `FiltersProvider` with custom filter components:
 
 ```typescript
@@ -63,6 +68,7 @@ const DataFilter = () => {
 The `FiltersProvider` component takes in filter state and its updater function and provides various methods to manage filters efficiently.
 
 **Props**:
+
 - `filters`: `T` - Filter values managed by your external state.
 - `setFilters`: `Dispatch<SetStateAction<T>>` - State updater function for filters.
 - `syncSearchParams`: `boolean` - Syncs the filters with URL search parameters if true.
@@ -73,18 +79,20 @@ The `FiltersProvider` component takes in filter state and its updater function a
 The `useFilters` hook provides methods for registering, setting, and resetting filters.
 
 **Methods**:
+
 - `register(name: keyof T, defaultValue: unknown)`: Registers a filter and sets its default value.
 - `unregister(name: keyof T)`: Unregisters a filter.
 - `setValue(name: keyof T, value: unknown)`: Updates the value of a specific filter.
 - `getValue(name: keyof T)`: Retrieves the current value of a filter.
 - `reset()`: Resets all filters to their initial values.
-- `isResetDisabled()`: Returns true if the reset button should be disabled.
+- `isResetDisabled`: Returns true if the reset button should be disabled.
 
 ---
 
 ## Examples
 
 ### FilterComponent Example
+
 Here’s a reusable filter input component using `useFilters` to manage individual filters:
 
 ```typescript
@@ -112,6 +120,7 @@ export const FilterComponent = ({ name, defaultValue = '' }) => {
 ```
 
 ### ResetButton Example
+
 A button component that resets all filters using the `reset` function from the `useFilters` hook:
 
 ```typescript
@@ -133,9 +142,11 @@ export const ResetButton = () => {
 ## Tutorial
 
 ### How to Create Custom Filters
+
 In this section, you will learn how to create custom filter components using the `useFilters` hook from the FiltersProvider package. We'll start by setting up a basic filter and then show you how to manage multiple filters together.
 
 #### Step 1: Set up filter state
+
 First, initialize your filter state using `useState` in your main component.
 
 ```typescript
@@ -143,6 +154,7 @@ const [filters, setFilters] = useState<Params>({});
 ```
 
 #### Step 2: Use FiltersProvider
+
 Wrap your components inside the `FiltersProvider`, passing the filter state and its updater.
 
 ```typescript
@@ -150,6 +162,7 @@ Wrap your components inside the `FiltersProvider`, passing the filter state and 
 ```
 
 #### Step 3: Create filter components
+
 Create individual filter components using the `useFilters` hook to register and set filter values.
 
 ```typescript
