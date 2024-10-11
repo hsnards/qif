@@ -29,7 +29,7 @@ export function Api() {
             <li><code className="text-sm bg-muted px-1 py-0.5 rounded">setValue(name: keyof T, value: unknown)</code> - Sets the value of a filter</li>
             <li><code className="text-sm bg-muted px-1 py-0.5 rounded">getValue(name: keyof T)</code> - Gets the current value of a filter</li>
             <li><code className="text-sm bg-muted px-1 py-0.5 rounded">reset()</code> - Resets all filters to their default values</li>
-            <li><code className="text-sm bg-muted px-1 py-0.5 rounded">isResetDisabled()</code> - Checks if the reset action is disabled</li>
+            <li><code className="text-sm bg-muted px-1 py-0.5 rounded">isResetDisabled</code> - Checks if the reset action is disabled</li>
           </ul>
         </section>
       </div>

@@ -130,7 +130,7 @@ const ResetButton = () => {
   const { reset, isResetDisabled } = useFilters();
 
   return (
-    <button onClick={reset} disabled={isResetDisabled()}>
+    <button onClick={reset} disabled={isResetDisabled}>
       Reset Filters 
     </button>
   );
