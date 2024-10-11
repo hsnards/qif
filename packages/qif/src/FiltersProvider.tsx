@@ -1,4 +1,4 @@
-import { isNil } from 'ramda';
+import { isNil } from "ramda";
 import {
   createContext,
   useCallback,
@@ -8,28 +8,28 @@ import {
   type Dispatch,
   type PropsWithChildren,
   type SetStateAction,
-} from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { FilterProviderProps, FiltersContextType, FiltersValue } from './types';
+} from "react";
+import { FilterProviderProps, FiltersContextType, FiltersValue } from "./types";
+import { parseSearchParams, setSearchParams } from "./utils";
 
 export const FiltersProvider = <T extends FiltersValue>(
-  props: PropsWithChildren<FilterProviderProps<T>>,
+  props: PropsWithChildren<FilterProviderProps<T>>
 ) => {
   const { children, filters, syncSearchParams, onBeforStateChange } = props;
   //NOTICE : We had to reassign the value here to solve the typescript problem
   const setFilters = props.setFilters as Dispatch<SetStateAction<FiltersValue>>;
 
   const defaultValueRef = useRef<Partial<T>>(filters);
-  const [, setSearchParams] = useSearchParams();
 
   const register = useCallback(
     (name: keyof T, defaultValue: unknown) => {
-      const searchValue = new URLSearchParams(window.location.search).get(String(name));
+      const searchParams = parseSearchParams();
+      const searchValue = searchParams[String(name)];
 
       let value = defaultValue;
 
-      if (syncSearchParams && searchValue !== null) {
-        value = searchValue?.includes(',') ? searchValue.split(',') : searchValue;
+      if (syncSearchParams && searchValue !== undefined) {
+        value = searchValue;
       }
 
       setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
@@ -39,7 +39,7 @@ export const FiltersProvider = <T extends FiltersValue>(
         [name]: defaultValue,
       };
     },
-    [setFilters, syncSearchParams],
+    [setFilters, syncSearchParams]
   );
 
   const unregister = useCallback(
@@ -51,56 +51,59 @@ export const FiltersProvider = <T extends FiltersValue>(
       });
 
       if (syncSearchParams) {
-        setSearchParams((prev) => {
-          const newSearchParams = new URLSearchParams(prev);
+        const searchParams = parseSearchParams();
+        delete searchParams[String(name)];
 
-          newSearchParams.delete(String(name));
-
-          return newSearchParams;
-        });
+        setSearchParams(searchParams);
       }
     },
-    [setFilters, syncSearchParams, setSearchParams],
+    [setFilters, syncSearchParams]
   );
 
   const setValue = useCallback(
     (name: keyof T, value: unknown) => {
-      setFilters((prevFilters) =>
-        onBeforStateChange
-          ? onBeforStateChange({ ...prevFilters, [name]: value }, name)
-          : { ...prevFilters, [name]: value },
-      );
+      setFilters((prevFilters) => {
+        const updatedFilters = { ...prevFilters, [name]: value };
+        return onBeforStateChange
+          ? onBeforStateChange(updatedFilters, name)
+          : updatedFilters;
+      });
 
       // Update search params
       if (syncSearchParams) {
-        setSearchParams((prev) => {
-          const newSearchParams = new URLSearchParams(prev);
+        const searchParams = parseSearchParams();
 
-          if (isNil(value)) {
-            newSearchParams.delete(String(name)); // Remove if value is null or undefined
-          } else {
-            newSearchParams.set(String(name), String(value));
-          }
+        if (isNil(value)) {
+          delete searchParams[String(name)];
+        } else {
+          searchParams[String(name)] = value as qs.ParsedQs;
+        }
 
-          return newSearchParams;
-        });
+        setSearchParams(searchParams);
       }
     },
-    [setSearchParams, setFilters, syncSearchParams],
+    [setFilters, syncSearchParams]
   );
 
-  const getValue = useCallback((name: keyof T) => (filters ? filters[name] : null), [filters]);
+  const getValue = useCallback(
+    (name: keyof T) => (filters ? filters[name] : null),
+    [filters]
+  );
 
   const reset = useCallback(() => {
-    setFilters( onBeforStateChange ? onBeforStateChange(defaultValueRef.current, 'clear') :  defaultValueRef.current);
+    setFilters(
+      onBeforStateChange
+        ? onBeforStateChange(defaultValueRef.current, "clear")
+        : defaultValueRef.current
+    );
     if (syncSearchParams) {
-      setSearchParams(new URLSearchParams());
+      setSearchParams({});
     }
-  }, [setFilters, setSearchParams, syncSearchParams,onBeforStateChange]);
+  }, [setFilters, syncSearchParams, onBeforStateChange]);
 
   const isResetDisabled = useMemo(
     () => JSON.stringify(filters) === JSON.stringify(defaultValueRef.current),
-    [filters],
+    [filters]
   );
 
   return (
@@ -121,12 +124,14 @@ export const FiltersProvider = <T extends FiltersValue>(
   );
 };
 
-const FiltersContext = createContext<FiltersContextType<FiltersValue> | null>(null);
+const FiltersContext = createContext<FiltersContextType<FiltersValue> | null>(
+  null
+);
 
 export const useFilters = <T extends FiltersValue>() => {
   const context = useContext(FiltersContext) as FiltersContextType<T> | null;
   if (!context) {
-    throw new Error('useFilters must be used within a FiltersProvider');
+    throw new Error("useFilters must be used within a FiltersProvider");
   }
   return context;
 };

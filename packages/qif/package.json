@@ -2,7 +2,7 @@
   "name": "react-qif",
   "private": false,
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Powerful filtering system for React.js applications",
   "license": "MIT",
   "author": {
@@ -27,19 +27,17 @@
     "dist"
   ],
   "dependencies": {
+    "qs": "^6.11.0",
     "ramda": "^0.30.1"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
-    "react-dom": ">=17.0.0",
-    "react-router-dom": ">=6.0.0"
+    "react-dom": ">=17.0.0"
   },
   "devDependencies": {
     "@types/ramda": "^0.30.2",
-    "@types/react-router-dom": "^5.3.3",
     "react": ">= ^17.0.0",
     "react-dom": ">= ^17.0.0",
-    "react-router-dom": ">=6.0.0",
     "typescript": "latest"
   },
   "publishConfig": {

@@ -8,9 +8,8 @@ import Link from "next/link";
 export const Header = () => {
   return (
     <>
-    
       <header
-        className={`sticky top-0  ${"backdrop-blur-sm"}  transition-all duration-200 border-b transition-colors border-foreground/10 px-4 md:px-6 z-50`}
+        className={`sticky top-0  backdrop-blur-sm transition-all duration-200 border-b transition-colors border-foreground/10 px-4 md:px-6 z-50`}
       >
         <div className="flex items-center gap-4 max-w-[1440px] mx-auto  h-16">
           <nav className="hidden flex-1 flex text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">

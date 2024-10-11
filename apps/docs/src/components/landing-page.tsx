@@ -99,44 +99,7 @@ const FilteredResults = () => {
               Why Choose Qif?
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Centralized State System",
-                  description:
-                    "Manage your application state efficiently with our centralized system.",
-                  icon: "🔄",
-                },
-                {
-                  title: "Headless UI",
-                  description:
-                    "Flexible, unstyled components that you can easily customize to your needs.",
-                  icon: "🎨",
-                },
-                {
-                  title: "Composable Components",
-                  description:
-                    "Build complex UIs by combining simple, reusable components.",
-                  icon: "🧩",
-                },
-                {
-                  title: "Sync State with Search Parameters",
-                  description:
-                    "Easily synchronize your app state with URL search parameters.",
-                  icon: "🔗",
-                },
-                {
-                  title: "Clean and Developer-friendly API",
-                  description:
-                    "Intuitive API design that makes development a breeze.",
-                  icon: "🛠️",
-                },
-                {
-                  title: "Performance Optimized",
-                  description:
-                    "Designed for efficiency, ensuring smooth performance even with large datasets.",
-                  icon: "⚡",
-                },
-              ].map((feature, index) => (
+              {features.map((feature, index) => (
                 <div key={index} className=" p-6 rounded-lg text-center">
                   <div className="text-4xl mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">
@@ -148,6 +111,15 @@ const FilteredResults = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+        
+        <section>
+          <div className="container max-w-[1440px]  mx-auto px-4">
+            <iframe
+              src="https://stackblitz.com/edit/vitejs-vite-jjoqf6?ctl=1&embed=1&file=README.md&theme=dark"
+              className="w-full h-[500px]"
+            ></iframe>
           </div>
         </section>
 
@@ -175,3 +147,40 @@ const FilteredResults = () => {
     </div>
   );
 }
+
+const features = [
+  {
+    title: "Centralized State System",
+    description:
+      "Manage your application state efficiently with our centralized system.",
+    icon: "🔄",
+  },
+  {
+    title: "Headless UI",
+    description:
+      "Flexible, unstyled components that you can easily customize to your needs.",
+    icon: "🎨",
+  },
+  {
+    title: "Composable Components",
+    description: "Build complex UIs by combining simple, reusable components.",
+    icon: "🧩",
+  },
+  {
+    title: "Sync State with Search Parameters",
+    description:
+      "Easily synchronize your app state with URL search parameters.",
+    icon: "🔗",
+  },
+  {
+    title: "Clean and Developer-friendly API",
+    description: "Intuitive API design that makes development a breeze.",
+    icon: "🛠️",
+  },
+  {
+    title: "Performance Optimized",
+    description:
+      "Designed for efficiency, ensuring smooth performance even with large datasets.",
+    icon: "⚡",
+  },
+];

@@ -14,11 +14,11 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src"),
       formats: ["es"],
-      fileName:'qif'
+      fileName: "qif",
     },
 
     rollupOptions: {
-      external: ["react", "react/jsx-runtime", "react-router-dom"],
+      external: ["react", "react/jsx-runtime", "qs"],
     },
   },
 });
