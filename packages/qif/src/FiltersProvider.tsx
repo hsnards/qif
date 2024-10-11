@@ -10,7 +10,7 @@ import {
   type SetStateAction,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FilterProviderProps, FiltersContextType, FiltersValue } from './types';
+import type { FilterProviderProps, FiltersContextType, FiltersValue } from './types';
 
 export const FiltersProvider = <T extends FiltersValue>(
   props: PropsWithChildren<FilterProviderProps<T>>,
