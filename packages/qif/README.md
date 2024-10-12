@@ -1,5 +1,15 @@
 
-# Qif 
+<h1 align="center">Qif</h1>
+<p align="center">Powerful filtering system for React.js applications</p>
+<div align="center">
+
+[![NPM](https://img.shields.io/npm/v/react-qif.svg)](https://www.npmjs.com/package/react-qif)
+[![Size](https://badgen.net/bundlephobia/minzip/react-qif)](https://bundlephobia.com/result?p=react-qif@latest)
+[![GitHub contributors](https://img.shields.io/github/contributors/hsnards/qif.svg)](https://GitHub.com/hsnards/qif/contributors/)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/hsnards/qif/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](https://github.com/hsnards/qif/compare)
+
+</div>
 
 ## Home
 
@@ -33,7 +43,7 @@ The `FiltersProvider` allows you to pass external filter states (`filters`) and 
 ### Basic Example
 Here’s a simple example of using the `FiltersProvider` with custom filter components:
 
-```typescript
+```tsx
 import { FiltersProvider } from 'qif';
 import { useState } from 'react';
 import FilterComponent from './FilterComponent';
@@ -87,7 +97,7 @@ The `useFilters` hook provides methods for registering, setting, and resetting f
 ### FilterComponent Example
 Here’s a reusable filter input component using `useFilters` to manage individual filters:
 
-```typescript
+```tsx
 import { useFilters } from 'qif';
 import { useEffect } from 'react';
 
@@ -114,7 +124,7 @@ export const FilterComponent = ({ name, defaultValue = '' }) => {
 ### ResetButton Example
 A button component that resets all filters using the `reset` function from the `useFilters` hook:
 
-```typescript
+```tsx
 import { useFilters } from 'qif';
 
 export const ResetButton = () => {
@@ -145,14 +155,14 @@ const [filters, setFilters] = useState<Params>({});
 #### Step 2: Use FiltersProvider
 Wrap your components inside the `FiltersProvider`, passing the filter state and its updater.
 
-```typescript
+```tsx
 <FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>...</FiltersProvider>
 ```
 
 #### Step 3: Create filter components
 Create individual filter components using the `useFilters` hook to register and set filter values.
 
-```typescript
+```tsx
 const FilterComponent = ({ name, defaultValue }) => {
   const { register, setValue, getValue } = useFilters();
   useEffect(() => register(name, defaultValue), [name, register, defaultValue]);
