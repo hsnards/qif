@@ -15,7 +15,7 @@ export const Footer = () => {
             GitHub
           </Link>
           <Link
-            href="https://npm.com/package/react-qif"
+            href="https://npmjs.com/package/react-qif"
             className="hover:text-primary"
           >
             NPM
