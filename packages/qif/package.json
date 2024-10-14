@@ -17,6 +17,11 @@
     "store",
     "headless"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hsnards/qif.git"
+  },
+  "homepage": "https://github.com/hsnards/qif#readme",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc && yarn run -T vite build"
