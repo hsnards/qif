@@ -1,2 +1,3 @@
-export { FiltersProvider, useFilters } from './FiltersProvider.tsx';
-export type { FilterProviderProps, FiltersContextType, FiltersValue } from './types';
+export * from './FiltersProvider';
+export * from './useFilters';
+

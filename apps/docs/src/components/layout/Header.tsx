@@ -19,7 +19,7 @@ export const Header = () => {
               className="flex text-gray-100 items-center gap-2 text-lg font-semibold md:text-base text-white hover:text-white"
             >
               <Flower2 className="h- w-6" />
-              <span>Qif Docs</span>
+              <span>Qif</span>
             </ActiveLink>
           </nav>
           <Sheet>

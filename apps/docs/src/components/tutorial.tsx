@@ -17,21 +17,26 @@ export function TutorialComponent() {
           Step 1: Set up filter state
         </h3>
         <p className="text-muted-foreground">
-          First, initialize your filter state using useState in your main
-          component:
+          First, initialize your filters using the useFilters hook with your parsers:
+
         </p>
         <div className="bg-gray-500/10 p-4 rounded-md">
           <pre className="overflow-x-auto">
             <code className="text-sm text-muted-foreground">
               <CodeBlock
-                code={`import { useState } from 'react';
-import { FiltersProvider } from 'react-qif';
+                code={`import { useFilters, FiltersProvider } from 'react-qif';
+import { parseAsString } from 'nuqs';
 
 const App = () => {
-  const [filters, setFilters] = useState({});
+  const filtersInstance = useFilters({
+    parsers: {
+      search: parseAsString.withDefault(''),
+      category: parseAsString.withDefault('test')
+    }
+  });
 
   return (
-    <FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>
+    <FiltersProvider instance={filtersInstance}>
       {/* Your app content */}
     </FiltersProvider>
   );
@@ -43,28 +48,85 @@ const App = () => {
       </section>
       <section className="space-y-3">
         <h3 className="text-xl font-semibold text-foreground">
-          Step 2: Create a custom filter component
+          Step 2: Set up NuqsAdapter
         </h3>
         <p className="text-muted-foreground">
-          Now, let's create a custom filter component using the useFilters hook:
+          Since Qif uses nuqs internally, you need to select and set up the appropriate NuqsAdapter for your framework:
         </p>
+        <h6 className="text-md font-semibold text-foreground mt-4">
+          For React Applications
+        </h6>
+        <div className="bg-gray-500/10 p-4 rounded-md">
+          <pre className="overflow-x-auto">
+            <code className="text-sm text-muted-foreground">
+              <CodeBlock
+                code={`import { NuqsAdapter } from 'nuqs/adapters/react';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <NuqsAdapter>
+      <App />
+    </NuqsAdapter>
+  </StrictMode>
+);`}
+              />
+            </code>
+          </pre>
+        </div>
+
+        <h6 className="text-md font-semibold text-foreground mt-4">
+          For Next.js Applications
+        </h6>
+        <div className="bg-gray-500/10 p-4 rounded-md">
+          <pre className="overflow-x-auto">
+            <code className="text-sm text-muted-foreground">
+              <CodeBlock
+                code={`import { NuqsAdapter } from 'nuqs/adapters/next';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <NuqsAdapter>{children}</NuqsAdapter>
+      </body>
+    </html>
+  );`}
+              />
+            </code>
+          </pre>
+        </div>
+
+
+
+        <div className="bg-yellow-500/10 p-4 rounded-md mt-4">
+          <p className="text-muted-foreground">
+            For more information about NuqsAdapter configuration, read{'   '}
+            <a
+              href="https://nuqs.47ng.com/docs/adapters"
+              className="text-blue-500 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Docs
+            </a>
+          </p>
+        </div>
+      </section>
+      <section className="space-y-3">
+        <h3 className="text-xl font-semibold text-foreground">
+          Step 3: Create a custom filter component
+        </h3>
         <p className="text-muted-foreground">
-          The register function registers each filter with its own name and
-          default value in the filters store.
+          Now, let's create a custom filter component using the useFiltersContext hook:
         </p>
         <div className="bg-gray-500/10 p-4 rounded-md">
           <pre className="overflow-x-auto">
             <code className="text-sm text-muted-foreground">
               <CodeBlock
-                code={`import { useFilters } from 'react-qif';
-import { useEffect } from 'react';
+                code={`import { useFiltersContext } from 'react-qif';
 
-const CustomFilter = ({ name, defaultValue = '' }) => {
-  const { register, setValue, getValue } = useFilters();
-
-  useEffect(() => {
-    register(name, defaultValue);
-  }, [name, defaultValue, register]);
+const CustomFilter = ({ name }) => {
+  const { setValue, getValue } = useFiltersContext();
 
   const handleChange = (e) => setValue(name, e.target.value);
 
@@ -74,7 +136,7 @@ const CustomFilter = ({ name, defaultValue = '' }) => {
       <input
         id={name}
         type="text"
-        value={getValue(name) || defaultValue}
+        value={getValue(name)}
         onChange={handleChange}
         placeholder={\`Enter \${name}...\`}
       />
@@ -88,7 +150,7 @@ const CustomFilter = ({ name, defaultValue = '' }) => {
       </section>
       <section className="space-y-3">
         <h3 className="text-xl font-semibold text-foreground">
-          Step 3: Use the custom filter in your app
+          Step 4: Use the custom filter in your app
         </h3>
         <p className="text-muted-foreground">
           Now you can use your custom filter component in your app:
@@ -97,13 +159,21 @@ const CustomFilter = ({ name, defaultValue = '' }) => {
           <pre className="overflow-x-auto">
             <code className="text-sm text-muted-foreground">
               <CodeBlock
-                code={`const App = () => {
-  const [filters, setFilters] = useState({});
+                code={`import { parseAsString } from 'nuqs';
+
+const App = () => {
+  const filtersInstance = useFilters({
+    syncWithSearchParams: true,
+    parsers: {
+      search: parseAsString.withDefault(''),
+      category: parseAsString.withDefault('test')
+    }
+  });
 
   return (
-    <FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>
-      <CustomFilter name="search" defaultValue="" />
-      <CustomFilter name="category" defaultValue="all" />
+    <FiltersProvider instance={filtersInstance}>
+      <CustomFilter name="search" />
+      <CustomFilter name="category" />
       {/* Other components */}
     </FiltersProvider>
   );
@@ -115,7 +185,7 @@ const CustomFilter = ({ name, defaultValue = '' }) => {
       </section>
       <section className="space-y-3">
         <h3 className="text-xl font-semibold text-foreground">
-          Step 4: Create a reset button
+          Step 5: Create a reset button
         </h3>
         <p className="text-muted-foreground">
           Let's add a reset button to clear all filters to default values:
@@ -124,10 +194,10 @@ const CustomFilter = ({ name, defaultValue = '' }) => {
           <pre className="overflow-x-auto">
             <code className="text-sm text-muted-foreground">
               <CodeBlock
-                code={`import { useFilters } from 'react-qif';
+                code={`import { useFiltersContext } from 'react-qif';
 
 const ResetButton = () => {
-  const { reset, isResetDisabled } = useFilters();
+  const { reset, isResetDisabled } = useFiltersContext();
 
   return (
     <button onClick={reset} disabled={isResetDisabled}>
@@ -142,7 +212,7 @@ const ResetButton = () => {
       </section>
       <section className="space-y-3">
         <h3 className="text-xl font-semibold text-foreground">
-          Step 5: Use filter values
+          Step 6: Use filter values
         </h3>
         <p className="text-muted-foreground">
           Finally, use the filter values in your components:
@@ -151,15 +221,17 @@ const ResetButton = () => {
           <pre className="overflow-x-auto">
             <code className="text-sm text-muted-foreground">
               <CodeBlock
-                code={`import { useFilters } from 'react-qif';
+                code={`import { useFiltersContext } from 'react-qif';
 
 const FilteredContent = () => {
-  const { getValue } = useFilters();
+  const { getValue, filters } = useFiltersContext();
 
   const searchTerm = getValue('search');
   const category = getValue('category');
 
-  // Use these values to filter your content
+  // You can also access all filters directly
+  console.log('All filters:', filters);
+
   return (
     <div>
       <h2>Filtered Results</h2>
