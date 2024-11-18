@@ -1,8 +1,10 @@
-
-<h1 align="center">Qif</h1>
-<p align="center">Powerful filtering system for React.js applications</p>
 <div align="center">
+  <h1>🎯 Qif</h1>
+  <p><strong>Powerful filtering system for React.js applications</strong></p>
+</div>
 
+<div align="center">
+  
 [![NPM](https://img.shields.io/npm/v/react-qif.svg)](https://www.npmjs.com/package/react-qif)
 [![Size](https://badgen.net/bundlephobia/minzip/react-qif)](https://bundlephobia.com/result?p=react-qif@latest)
 [![GitHub contributors](https://img.shields.io/github/contributors/hsnards/qif.svg)](https://GitHub.com/hsnards/qif/contributors/)
@@ -11,162 +13,196 @@
 
 </div>
 
-## Home
+## ✨ Features
 
-### Introduction
-FiltersProvider is a React component that allows for managing and synchronizing filter states with URL search parameters. This library simplifies handling filters in your React applications by allowing you to manage filter state externally and sync it with the URL.
+- 🔄 **Centralized State System** - Efficient application state management
+- 🎨 **Headless UI** - Flexible, unstyled components for full customization
+- 🧩 **Composable Components** - Build complex UIs with simple, reusable parts
+- 🔗 **URL Sync** - Built on nuqs for robust URL state management
+- 🛠️ **Developer-Friendly API** - Intuitive design for seamless development
+- ⚡ **Performance Optimized** - Smooth handling of large datasets
 
-### Getting Started
-Learn how to get started with the FiltersProvider package by following the installation and usage instructions.
-
----
-
-## Installation
-
-### Install the Package
-To install the FiltersProvider package in your project, use the following command:
+## 📦 Installation
 
 ```bash
-yarn add react-qif
+# Using npm
+npm install react-qif nuqs
+
+# Using yarn
+yarn add react-qif nuqs
 ```
 
-### Basic Setup
-After installation, import `FiltersProvider` and other hooks from the library, and wrap your components in the `FiltersProvider` to manage filter states.
-
----
-
-## Usage
-
-### Overview
-The `FiltersProvider` allows you to pass external filter states (`filters`) and their updater (`setFilters`) for efficient filter management. It synchronizes filter states with URL search parameters for a seamless user experience.
-
-### Basic Example
-Here’s a simple example of using the `FiltersProvider` with custom filter components:
+## 🚀 Quick Start
 
 ```tsx
-import { FiltersProvider } from 'qif';
-import { useState } from 'react';
-import FilterComponent from './FilterComponent';
-import ResetButton from './ResetButton';
+import { useFilters, FiltersProvider, useFiltersContext } from 'react-qif';
+import { parseAsString } from 'nuqs';
 
-const DataFilter = () => {
-  const [filters, setFilters] = useState<Params>({});
+type FiltersType = {
+  search: string;
+  category: string;
+};
+
+const App = () => {
+  const filtersInstance = useFilters({
+    parsers: {
+      search: parseAsString.withDefault(''),
+      category: parseAsString.withDefault('test')
+    }
+  });
 
   return (
-    <FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>
-      <div className='flex flex-col gap-5'>
-        <FilterComponent name='test_filter' />
-        <FilterComponent name='another_filter' />
-        <ResetButton />
-      </div>
+    <FiltersProvider instance={filtersInstance}>
+      <SearchFilter />
     </FiltersProvider>
   );
 };
-```
 
----
-
-## API Reference
-
-### FiltersProvider
-
-The `FiltersProvider` component takes in filter state and its updater function and provides various methods to manage filters efficiently.
-
-**Props**:
-- `filters`: `T` - Filter values managed by your external state.
-- `setFilters`: `Dispatch<SetStateAction<T>>` - State updater function for filters.
-- `syncSearchParams`: `boolean` - Syncs the filters with URL search parameters if true.
-- `onBeforeStateChange`: `(filters: T, reason: keyof T | 'clear') => T` - Callback function before the filter state changes.
-
-### useFilters
-
-The `useFilters` hook provides methods for registering, setting, and resetting filters.
-
-**Methods**:
-- `register(name: keyof T, defaultValue: unknown)`: Registers a filter and sets its default value.
-- `unregister(name: keyof T)`: Unregisters a filter.
-- `setValue(name: keyof T, value: unknown)`: Updates the value of a specific filter.
-- `getValue(name: keyof T)`: Retrieves the current value of a filter.
-- `reset()`: Resets all filters to their initial values.
-- `isResetDisabled()`: Returns true if the reset button should be disabled.
-
----
-
-## Examples
-
-### FilterComponent Example
-Here’s a reusable filter input component using `useFilters` to manage individual filters:
-
-```tsx
-import { useFilters } from 'qif';
-import { useEffect } from 'react';
-
-export const FilterComponent = ({ name, defaultValue = '' }) => {
-  const { register, setValue, getValue } = useFilters();
-
-  useEffect(() => {
-    register(name, defaultValue);
-  }, [name, register, defaultValue]);
-
-  const handleChange = (e) => setValue(name, e.target.value);
+const SearchFilter = () => {
+  const { getValue, setValue } = useFiltersContext<FiltersType>();
 
   return (
     <input
-      type='text'
-      onChange={handleChange}
-      placeholder={`Filter: ${name}`}
-      value={getValue(name) || defaultValue}
+      value={getValue('search') || ''}
+      onChange={(e) => setValue('search', e.target.value)}
     />
   );
 };
 ```
 
-### ResetButton Example
-A button component that resets all filters using the `reset` function from the `useFilters` hook:
+## 🔧 Setup
 
+### 1. Configure NuqsAdapter
+
+#### For Next.js:
 ```tsx
-import { useFilters } from 'qif';
+import { NuqsAdapter } from 'nuqs/adapters/next';
 
-export const ResetButton = () => {
-  const { reset, isResetDisabled } = useFilters();
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <NuqsAdapter>{children}</NuqsAdapter>
+      </body>
+    </html>
+  );
+}
+```
+
+#### For React:
+```tsx
+import { NuqsAdapter } from 'nuqs/adapters/react';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <NuqsAdapter>
+      <App />
+    </NuqsAdapter>
+  </StrictMode>
+);
+```
+
+## 📚 API Reference
+
+### FiltersProvider Props
+- `instance`: Filter instance created by useFilters
+- `children`: React nodes
+
+### useFilters Hook Options
+```tsx
+interface UseFiltersOptions<T extends FiltersValue> {
+    syncWithSearchParams?: boolean;
+    parsers: UseQueryStatesKeysMap<T>;
+}
+```
+
+### useFiltersContext Hook
+Returns an object with the following methods:
+- `register(name, defaultValue)`: Register a filter with default value
+- `unregister(name)`: Remove a filter
+- `setValue(name, value)`: Update filter value
+- `getValue(name)`: Get current filter value
+- `reset()`: Reset all filters to defaults
+- `isResetDisabled`: Check if reset is available
+
+## 🔄 Client-Side Filtering
+
+Unlike nuqs, Qif also supports client-side filtering. By setting `syncWithSearchParams` to `false`, no parameters will be added to the URL. This is useful for temporary filters or when you don't want to persist the filter state in the URL.
+
+### Client-Side Example
+```tsx
+const App = () => {
+  const filtersInstance = useFilters({
+    syncWithSearchParams: false, // Disable URL synchronization
+    parsers: {
+      search: parseAsString.withDefault(''),
+      category: parseAsString.withDefault('all')
+    }
+  });
 
   return (
-    <button onClick={reset} disabled={isResetDisabled}>
-      Reset Filters
-    </button>
+    <FiltersProvider instance={filtersInstance}>
+      <ProductFilters />
+      <ProductList />
+    </FiltersProvider>
+  );
+};
+
+const ProductFilters = () => {
+  const { getValue, setValue } = useFiltersContext();
+
+  return (
+    <div className="filters">
+      <input
+        value={getValue('search') || ''}
+        onChange={(e) => setValue('search', e.target.value)}
+        placeholder="Search products..."
+      />
+      
+      <select
+        value={getValue('category') || 'all'}
+        onChange={(e) => setValue('category', e.target.value)}
+      >
+        <option value="all">All Categories</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+      </select>
+    </div>
+  );
+};
+
+const ProductList = () => {
+  const { getValue } = useFiltersContext();
+  const searchTerm = getValue('search') as string;
+  const category = getValue('category') as string;
+
+  // Filter your products based on searchTerm and category
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = category === 'all' || product.category === category;
+    return matchesSearch && matchesCategory;
+  });
+
+  return (
+    <div className="products">
+      {filteredProducts.map(product => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
   );
 };
 ```
 
----
+This example demonstrates:
+- Client-side filtering without URL parameter synchronization
+- Multiple filter types (search input and category select)
+- Real-time filtering of product list
+- Type-safe filter values with TypeScript
 
-## Tutorial
+## 🤝 Contributing
 
-### How to Create Custom Filters
-In this section, you will learn how to create custom filter components using the `useFilters` hook from the FiltersProvider package. We'll start by setting up a basic filter and then show you how to manage multiple filters together.
+Contributions, issues and feature requests are welcome! Feel free to check [issues page](https://github.com/hsnards/qif/issues).
 
-#### Step 1: Set up filter state
-First, initialize your filter state using `useState` in your main component.
+## 📄 License
 
-```typescript
-const [filters, setFilters] = useState<Params>({});
-```
-
-#### Step 2: Use FiltersProvider
-Wrap your components inside the `FiltersProvider`, passing the filter state and its updater.
-
-```tsx
-<FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>...</FiltersProvider>
-```
-
-#### Step 3: Create filter components
-Create individual filter components using the `useFilters` hook to register and set filter values.
-
-```tsx
-const FilterComponent = ({ name, defaultValue }) => {
-  const { register, setValue, getValue } = useFilters();
-  useEffect(() => register(name, defaultValue), [name, register, defaultValue]);
-  const handleChange = (e) => setValue(name, e.target.value);
-  return (<input value={getValue(name)} onChange={handleChange} />);
-};
-```
+MIT © [Hasan Ardestani](https://github.com/hsnards)

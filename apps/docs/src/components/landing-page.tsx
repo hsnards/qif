@@ -11,7 +11,7 @@ import { Footer } from "./layout/Footer";
 
 const CodeBlock = dynamic(
   () => import("./CodeBlock").then((m) => m.CodeBlock),
-  { ssr: false }
+  { ssr: false, loading: () => <div>Loading...</div> }
 );
 
 export function LandingPageComponent() {
@@ -28,6 +28,9 @@ export function LandingPageComponent() {
                 <div className="relative flex px-4 justify-center flex-col gap-10 overflow-hidden rounded-lg min-h-[400px] lg:min-h-[700px]">
                   <h1 className="text-6xl md:text-8xl font-bold  dark:text-white">
                     Qif
+                    <span className=" ml-2 rotate-12 bg-red-500 text-white text-xs px-2 py-1 rounded-md">
+                      🎉  v2 🎉
+                    </span>
                   </h1>
                   <Ripple className="pointer-events-none bg-transparent " />
                   <p className="text-2xl md:text-4xl text-gray-700 dark:text-gray-300">
@@ -55,37 +58,41 @@ export function LandingPageComponent() {
                 <div className="overflow-x-auto p-4 text-xs  sm:text-sm">
                   <Suspense fallback={"...."}>
                     <CodeBlock
-                      code={`import { useFilters, FiltersProvider } from 'react-qif'
+                      code={`import { useFilters, FiltersProvider , useFiltersContext} from 'react-qif';
+import { parseAsString } from 'nuqs';
+
+type FiltersType = {search: string, category: string};
 
 const App = () => {
-  const [filters, setFilters] = useState<Partial<Params>>({});
+  const filtersInstance = useFilters({
+    parsers: {
+      search: parseAsString.withDefault(''),
+      category: parseAsString.withDefault('test')
+    }
+  });
 
   return (
-    <FiltersProvider syncSearchParams filters={filters} setFilters={setFilters}>
-        <SearchFilter />
-        <CategoryFilter />
-        <PriceRangeFilter />
-        <ResetButton />
-        <FilteredResults />
+    <FiltersProvider instance={filtersInstance}>
+      <SearchFilter />
     </FiltersProvider>
   );
 };
 
 
-const FilteredResults = () => {
-  const { getValue } = useFilters();
-  const searchTerm = getValue('search');
+const SearchFilter = () => {
+  const { getValue, setValue } = useFiltersContext<FiltersType>();
 
-  // Use searchTerm to filter your content
   return (
-    <div>
-      {/* Your filtered content */}
-    </div>
+    <input
+      value={getValue('search') || ''}
+      onChange={(e) => setValue('search', e.target.value)}
+    />
   );
-}
+};
 
 `}
                     />
+
                   </Suspense>
                 </div>
               </NeonGradientCard>
@@ -99,44 +106,7 @@ const FilteredResults = () => {
               Why Choose Qif?
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Centralized State System",
-                  description:
-                    "Manage your application state efficiently with our centralized system.",
-                  icon: "🔄",
-                },
-                {
-                  title: "Headless UI",
-                  description:
-                    "Flexible, unstyled components that you can easily customize to your needs.",
-                  icon: "🎨",
-                },
-                {
-                  title: "Composable Components",
-                  description:
-                    "Build complex UIs by combining simple, reusable components.",
-                  icon: "🧩",
-                },
-                {
-                  title: "Sync State with Search Parameters",
-                  description:
-                    "Easily synchronize your app state with URL search parameters.",
-                  icon: "🔗",
-                },
-                {
-                  title: "Clean and Developer-friendly API",
-                  description:
-                    "Intuitive API design that makes development a breeze.",
-                  icon: "🛠️",
-                },
-                {
-                  title: "Performance Optimized",
-                  description:
-                    "Designed for efficiency, ensuring smooth performance even with large datasets.",
-                  icon: "⚡",
-                },
-              ].map((feature, index) => (
+              {features.map((feature, index) => (
                 <div key={index} className=" p-6 rounded-lg text-center">
                   <div className="text-4xl mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">
@@ -148,6 +118,15 @@ const FilteredResults = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="container max-w-[1440px]  mx-auto px-4">
+            <iframe
+              src="https://stackblitz.com/edit/vitejs-vite-kx767t?ctl=1&embed=1&file=src%2FApp.tsx&theme=dark&view=preview"
+              className="w-full h-[500px]"
+            ></iframe>
           </div>
         </section>
 
@@ -175,3 +154,40 @@ const FilteredResults = () => {
     </div>
   );
 }
+
+const features = [
+  {
+    title: "Centralized State System",
+    description:
+      "Manage your application state efficiently with our centralized system.",
+    icon: "🔄",
+  },
+  {
+    title: "Headless UI",
+    description:
+      "Flexible, unstyled components that you can easily customize to your needs.",
+    icon: "🎨",
+  },
+  {
+    title: "Composable Components",
+    description: "Build complex UIs by combining simple, reusable components.",
+    icon: "🧩",
+  },
+  {
+    title: "Sync State with Search Parameters",
+    description:
+      "Built on top of nuqs for robust URL state management and SEO benefits.",
+    icon: "🔗",
+  },
+  {
+    title: "Clean and Developer-friendly API",
+    description: "Intuitive API design that makes development a breeze.",
+    icon: "🛠️",
+  },
+  {
+    title: "Performance Optimized",
+    description:
+      "Designed for efficiency, ensuring smooth performance even with large datasets.",
+    icon: "⚡",
+  },
+];

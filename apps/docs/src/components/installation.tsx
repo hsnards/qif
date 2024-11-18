@@ -1,8 +1,5 @@
 'use client'
 
-import { CodeBlock } from "./CodeBlock"
-
-
 export function InstallationComponent() {
   return (
 
@@ -17,7 +14,7 @@ export function InstallationComponent() {
           <h3 className="text-xl font-semibold text-foreground">Using npm</h3>
           <div className="bg-gray-400/10 p-4 rounded-md">
             <pre className="overflow-x-auto">
-              <code className="text-sm text-muted-foreground">npm install react-qif</code>
+              <code className="text-sm text-muted-foreground">npm install react-qif nuqs</code>
             </pre>
           </div>
         </section>
@@ -25,14 +22,15 @@ export function InstallationComponent() {
           <h3 className="text-xl font-semibold text-foreground">Using yarn</h3>
           <div className="bg-gray-400/10 p-4 rounded-md">
             <pre className="overflow-x-auto">
-              <code className="text-sm text-muted-foreground">yarn add react-qif</code>
+              <code className="text-sm text-muted-foreground">yarn add react-qif nuqs</code>
             </pre>
           </div>
         </section>
         <section className="space-y-3">
           <h3 className="text-xl font-semibold text-foreground">Requirements</h3>
           <p className="text-muted-foreground">
-            Qif requires React 16.8+ as it uses React Hooks. Make sure your project meets this requirement before installation.
+            Qif uses nuqs internally. Make sure your project meets its requirements before installation.
+            <a href="https://nuqs.47ng.com/" target="_blank" rel="noreferrer noopener" className="text-blue-500"> Learn more about nuqs</a>
           </p>
         </section>
       </div>
